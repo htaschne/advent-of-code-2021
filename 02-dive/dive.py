@@ -10,15 +10,16 @@ def main():
   for cmd, val in lines:
     val = int(val)
 
-    if cmd == "forward":
-      d += (a * val)
-      h += val
+    match cmd:
+      case "forward":
+        d += (a * val)
+        h += val
 
-    elif cmd == "down":
-      a += val
+      case "down":
+        a += val
 
-    elif cmd == "up":
-      a -= val
+      case "up":
+        a -= val
 
   print(h * d)
 
