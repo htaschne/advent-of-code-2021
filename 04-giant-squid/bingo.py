@@ -48,7 +48,7 @@ class Game:
   boards: list[Board]
   draws: list[int]
 
-  def pick(self, token: int) -> (bool, list[list[int]]):
+  def pick(self, token: int) -> tuple[bool, list[list[int]]]:
     ret = []
     for i, board in enumerate(self.boards):
       if i not in self.winners:
@@ -71,6 +71,7 @@ class Game:
             b = self.boards[winner]
             b.print()
             print(f"board winner: {winner + 1} with score = {score}")
+            # break # for part one we're only interested in the first winner.
             print()
 
 
