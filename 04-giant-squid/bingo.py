@@ -22,7 +22,7 @@ class Board:
     full_col = all(self.marks[(r, col)] for r in range(len(self.board)))
     return full_row or full_col
 
-  def mark(self, token: int):
+  def mark(self, token: int) -> bool:
     if token not in self.positions:
       return False
 
@@ -48,14 +48,14 @@ class Game:
   boards: list[Board]
   draws: list[int]
 
-  def pick(self, token):
+  def pick(self, token: int) -> (bool, list[list[int]]):
     ret = []
     for i, board in enumerate(self.boards):
       if i not in self.winners:
         if board.mark(token):
           ret.append((i, self.boards[i].score(token)))
     if len(ret) == 0:
-      return False, [-1, -1]
+      return False, [[-1, -1]]
     return True, ret
 
   def play(self):
