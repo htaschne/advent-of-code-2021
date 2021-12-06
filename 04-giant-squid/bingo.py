@@ -30,9 +30,14 @@ class Board:
     self.marks[(row, col)] = True
     return self.check_winner(row, col)
 
-  def __str__(self) -> str:
-    ret = "\n".join([str(row) for row in self.board])
-    return ret+"\n"
+  def print(self):
+    for r, row in enumerate(self.board):
+      for c, col in enumerate(row):
+        if self.marks[(r, c)]:
+          print("\033[32m" + "%2d" % col + "\033[0m", end=" ")
+        else:
+          print("%2d" % col, end=" ")
+      print()
 
   def score(self, token: int) -> int:
     return token * sum([self.board[k[0]][k[1]] for k, v in self.marks.items() if not v])
@@ -44,18 +49,29 @@ class Game:
   draws: list[int]
 
   def pick(self, token):
+    ret = []
     for i, board in enumerate(self.boards):
-      if board.mark(token):
-        return True, i + 1, self.boards[i].score(token)
-    return False, -1, -1
+      if i not in self.winners:
+        if board.mark(token):
+          ret.append((i, self.boards[i].score(token)))
+    if len(ret) == 0:
+      return False, [-1, -1]
+    return True, ret
 
   def play(self):
+    self.winners = set()
     has_winner, score = False, -1
     for draw in self.draws:
-      has_winner, winner, score = self.pick(draw)
+      has_winner, round_winners = self.pick(draw)
+
       if has_winner:
-        break
-    print(f"board winner: {winner} with score = {score}")
+        for winner, score in round_winners:
+          if winner not in self.winners:
+            self.winners.add(winner)
+            b = self.boards[winner]
+            b.print()
+            print(f"board winner: {winner + 1} with score = {score}")
+            print()
 
 
 def read_case(filename: str) -> Game:
