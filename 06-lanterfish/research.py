@@ -2,25 +2,31 @@
 
 import sys
 
-def step(jellys):
-  to_append = []
-  new_jellys = []
-  for j in jellys:
-    if j == 0:
-      new_jellys.append(6)
-      to_append.append(8)
-    else:
-      new_jellys.append(j - 1)
-  return new_jellys + to_append
+from collections import defaultdict
+
+def step(jellys: dict[int, int]) -> dict[int, int]:
+    new_jellys = defaultdict(int)
+    for n, count in jellys.items():
+      if n == 0:
+        new_jellys[6] += count
+        new_jellys[8] += count
+      else:
+        new_jellys[n - 1] += count
+
+    return new_jellys
 
 
 def main():
-  jellys = list(map(int, open(sys.argv[1]).readline().rstrip().split(",")))
+  list_jellys = list(map(int, open(sys.argv[1]).readline().rstrip().split(",")))
+  jellys = defaultdict(int)
 
-  for _ in range(80):
+  for j in list_jellys:
+    jellys[j] += 1
+
+  for day in range(256):
     jellys = step(jellys)
 
-  print(len(jellys))
+  print(sum(jellys.values()))
 
 
 main()
