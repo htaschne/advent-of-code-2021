@@ -5,15 +5,15 @@ import sys
 from collections import defaultdict
 
 def step(jellys: dict[int, int]) -> dict[int, int]:
-    new_jellys = defaultdict(int)
-    for n, count in jellys.items():
-      if n == 0:
-        new_jellys[6] += count
-        new_jellys[8] += count
-      else:
-        new_jellys[n - 1] += count
+  new_jellys = defaultdict(int)
+  for n, count in jellys.items():
+    if n == 0:
+      new_jellys[6] += count
+      new_jellys[8] += count
+    else:
+      new_jellys[n - 1] += count
 
-    return new_jellys
+  return new_jellys
 
 
 def main():
