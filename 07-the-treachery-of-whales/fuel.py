@@ -2,12 +2,9 @@
 
 import sys
 
-from functools import lru_cache
-
 def fuel(pos: int, lst: list[int]) -> int:
   return sum([abs(pos - h) for h in lst])
 
-@lru_cache
 def s(x: int) -> int:
   return x * (1 + x) // 2
 
