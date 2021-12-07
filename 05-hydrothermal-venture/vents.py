@@ -21,7 +21,6 @@ def main():
         r1 += dr
         c1 += dc
 
-
     if c1 == c2:
       r1, r2 = min(r1, r2), max(r1, r2)
       for row in range(r1, r2 + 1):
