@@ -49,14 +49,8 @@ class Game:
   draws: list[int]
 
   def pick(self, token: int) -> tuple[bool, list[list[int]]]:
-    ret = []
-    for i, board in enumerate(self.boards):
-      if i not in self.winners:
-        if board.mark(token):
-          ret.append((i, self.boards[i].score(token)))
-    if len(ret) == 0:
-      return False, [[-1, -1]]
-    return True, ret
+    ret = [(i, self.boards[i].score(token)) for i, board in enumerate(self.boards) if i not in self.winners and board.mark(token)]
+    return (False, [[-1, -1]]) if len(ret) == 0 else True, ret
 
   def play(self):
     self.winners = set()
