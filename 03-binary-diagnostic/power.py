@@ -2,6 +2,7 @@
 
 import sys
 
+
 def count_frequency(report: list[str]) -> list[int]:
   count = [0] * len(report[0])
   for diagnostic in report:
@@ -23,7 +24,10 @@ def filter(report: list[str], a: str, b: str) -> int:
     count = count_frequency(report)
 
     for diagnostic in report:
-      filtered_report = [d for d in report if d[i] == (a if count[i] >= len(report) / 2 else b)]
+      filtered_report = [
+          d for d in report
+          if d[i] == (a if count[i] >= len(report) / 2 else b)
+      ]
 
     report = filtered_report
     i += 1

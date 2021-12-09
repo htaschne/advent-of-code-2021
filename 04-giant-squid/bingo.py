@@ -4,8 +4,8 @@ import sys
 
 from dataclasses import dataclass
 
-class Board:
 
+class Board:
   def __init__(self, board: list[list[int]]):
     self.board = board
     self.positions: dict[int, (int, int)] = {}
@@ -40,7 +40,8 @@ class Board:
       print()
 
   def score(self, token: int) -> int:
-    return token * sum([self.board[k[0]][k[1]] for k, v in self.marks.items() if not v])
+    return token * sum(
+        [self.board[k[0]][k[1]] for k, v in self.marks.items() if not v])
 
 
 @dataclass
@@ -49,7 +50,8 @@ class Game:
   draws: list[int]
 
   def pick(self, token: int) -> tuple[bool, list[list[int]]]:
-    ret = [(i, board.score(token)) for i, board in enumerate(self.boards) if i not in self.winners and board.mark(token)]
+    ret = [(i, board.score(token)) for i, board in enumerate(self.boards)
+           if i not in self.winners and board.mark(token)]
     return (False, [[-1, -1]]) if len(ret) == 0 else True, ret
 
   def play(self):
@@ -72,7 +74,13 @@ class Game:
 def read_case(filename: str) -> Game:
   content = open(filename).read().split("\n\n")
   draws = list(map(int, content[0].split(",")))
-  boards = [Board([list(map(int, x.strip().replace("  ", " ").split(" "))) for x in b.split("\n") if x]) for b in content[1:]]
+  boards = [
+      Board([
+          list(map(int,
+                   x.strip().replace("  ", " ").split(" ")))
+          for x in b.split("\n") if x
+      ]) for b in content[1:]
+  ]
   return Game(boards, draws)
 
 

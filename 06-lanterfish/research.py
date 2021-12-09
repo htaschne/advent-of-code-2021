@@ -4,6 +4,7 @@ import sys
 
 from collections import defaultdict
 
+
 def step(jellys: dict[int, int]) -> dict[int, int]:
   new_jellys = defaultdict(int)
   for n, count in jellys.items():
@@ -17,7 +18,8 @@ def step(jellys: dict[int, int]) -> dict[int, int]:
 
 
 def main():
-  list_jellys = list(map(int, open(sys.argv[1]).readline().rstrip().split(",")))
+  list_jellys = list(map(int,
+                         open(sys.argv[1]).readline().rstrip().split(",")))
   jellys = defaultdict(int)
 
   for j in list_jellys:

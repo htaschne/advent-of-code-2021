@@ -4,6 +4,7 @@ import sys
 
 from collections import defaultdict
 
+
 def main():
   d = defaultdict(int)
   for line in open(sys.argv[1]).readlines():
@@ -13,8 +14,8 @@ def main():
 
     if r1 != r2 and c1 != c2:
       # diagonal
-      dr = 1 if r2 - r1 > 0 else - 1
-      dc = 1 if c2 - c1 > 0 else - 1
+      dr = 1 if r2 - r1 > 0 else -1
+      dc = 1 if c2 - c1 > 0 else -1
 
       while r1 != r2 and c1 != c2:
         d[(r1, c1)] += 1
