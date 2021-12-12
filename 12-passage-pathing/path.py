@@ -3,35 +3,44 @@
 
 import sys
 
-from collections import defaultdict
+from collections import defaultdict, Counter
 
-def explore(target, G, path, paths):
-  if target == "end":
-    paths.add(path)
-    # print(",".join(path))
-    return 1
 
+def explore(target, G, path, paths, twice):
   if path in paths:
-    return 0
+    return
 
-  ways = 0
+  if target == "end":
+    # print(",".join(path))
+    paths.add(path)
+    return
+
   for n in G[target]:
-    if n.islower() and n in set(path):
+    c = Counter(path)
+    if n.islower() and n in c and not (twice == n and c[n] < 2):
       continue
 
-    ways += explore(n, G, path + (n, ), paths)
-  return ways
+    explore(n, G, path + (n, ), paths, twice)
 
 
 def main():
+  small = set()
   G = defaultdict(list)
   for line in open(sys.argv[1]):
     s, e = line.rstrip().split("-")
     G[s].append(e)
     G[e].append(s)
 
+    if s.islower() and s not in ("start", "end"):
+      small.add(s)
+    if e.islower() and e not in ("start", "end"):
+      small.add(e)
+
   paths = set()
-  total = explore("start", G, ("start", ), paths)
-  print(total)
+  for s in small:
+    explore("start", G, ("start", ), paths, s)
+
+  print(len(paths))
+
 
 main()
