@@ -3,46 +3,35 @@
 
 import sys
 
-from collections import defaultdict, Counter
+from collections import Counter
 
-def step(template, rules):
-  pairs = list(zip(template, template[1:]))
 
-  new_template = ""
+def count_letters(pairs, template):
+  c = Counter()
   for p in pairs:
-    f, t = p
-    new_template += f + rules["".join(p)]
+    c[p[0]] += pairs[p]
+  c[template[-1]] += 1
 
-  p = pairs[-1]
-  f, t = p
-  new_template += t
-
-  return new_template
-
-def call(pair, rules, counter, s=0):
-  # stop case
-  if s == 40:
-    counter[pair[0]] += 1
-    counter[pair[1]] += 1
-    return
-
-  # generate two pairs from one
-  p1 = pair[0] + rules[pair]
-  p2 = rules[pair] + pair[1]
-
-  # recursively call
-  call(p1, rules, counter, s+1)
-  call(p2, rules, counter, s+1)
+  return max(c.values()), min(c.values())
 
 
-def one(template, rules):
-  for i in range(10):
-    template = step(template, rules)
-    # print(i, len(template))
+def step(pairs, rules):
+  new_pairs = Counter()
 
-  c = Counter(template)
-  mn, mx = min([x for x in c.values()]), max([x for x in c.values()])
-  print(mx - mn)
+  for p in pairs:
+    new_pairs[p[0] + rules[p]] += pairs[p]
+    new_pairs[rules[p] + p[1]] += pairs[p]
+
+  return new_pairs
+
+
+def simulate(pairs, rules, template, size):
+  for s in range(size):
+    pairs = step(pairs, rules)
+
+  most, least = count_letters(pairs, template)
+  print(most - least)
+
 
 def main():
   template, b = open(sys.argv[1]).read().rstrip().split("\n\n")
@@ -52,12 +41,12 @@ def main():
     f, t = r.split(" -> ")
     rules[f] = t
 
-  one(template, rules)
+  pairs = Counter()
+  for i in range(len(template) - 1):
+    pairs[template[i] + template[i + 1]] += 1
 
-  # too slow
-  # counter = defaultdict(int)
-  # for p in ["".join(x) for x in list(zip(template, template[1:]))]:
-  #   call(p, rules, counter)
-  # print(counter)
+  simulate(pairs, rules, template, 10)
+  simulate(pairs, rules, template, 40)
+
 
 main()
